@@ -7,6 +7,7 @@ import (
 var (
 	_globalMU sync.RWMutex
 	_globalL  Logger
+	_emptyL   = NewEmptyLogger()
 )
 
 // ReplaceGlobals replaces the global Logger and returns a
@@ -24,6 +25,13 @@ func ReplaceGlobals(logger Logger) func() {
 func L() Logger {
 	_globalMU.RLock()
 	l := _globalL
+	_globalMU.RUnlock()
+	return l
+}
+
+func EmptyLogger() Logger {
+	_globalMU.RLock()
+	l := _emptyL
 	_globalMU.RUnlock()
 	return l
 }
